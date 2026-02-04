@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Buddy Finder - Study Together, Succeed Together</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h2>📚 Exam Buddy</h2>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="login.html" class="btn-login">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🎓 Find Your Perfect Study Partner</h1>
+            <p>Connect with exam aspirants, join study groups, share resources, and achieve your goals together!</p>
+            <div class="cta-buttons">
+                <button class="btn-primary" onclick="scrollToRegister()">Get Started Free</button>
+                <button class="btn-secondary" onclick="alert('Demo video coming soon!')">Watch Demo</button>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <h3>500+</h3>
+                <p>Students</p>
+            </div>
+            <div class="stat-card">
+                <h3>50+</h3>
+                <p>Study Groups</p>
+            </div>
+            <div class="stat-card">
+                <h3>1000+</h3>
+                <p>Resources</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2>✨ Amazing Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">👥</div>
+                <h3>Find Study Buddies</h3>
+                <p>Connect with students preparing for same exams</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📖</div>
+                <h3>Study Groups</h3>
+                <p>Join or create groups for collaborative learning</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📚</div>
+                <h3>Share Resources</h3>
+                <p>Upload and download study materials</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">❓</div>
+                <h3>Doubt Forum</h3>
+                <p>Ask questions and help others</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Track Progress</h3>
+                <p>Monitor your daily study hours and streaks</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🏆</div>
+                <h3>Leaderboard</h3>
+                <p>Compete with peers and stay motivated</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2>🎯 Why Exam Buddy?</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>📌 Preparing for competitive exams alone can be tough. Exam Buddy connects you with like-minded students who share your goals.</p>
+                <p>💡 Study together, motivate each other, share resources, and make exam preparation more effective and enjoyable!</p>
+                <p>🚀 Whether you're preparing for VDO, SSC, UPSC, or Teaching exams - find your perfect study partner here!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section id="register" class="register-section">
+        <div class="register-container">
+            <h2>🎓 Join Exam Buddy Today!</h2>
+            <p>Create your free account in 30 seconds</p>
+            
+            <form id="registerForm" class="register-form">
+                <div class="form-group">
+                    <label>👤 Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>📧 Email / Phone</label>
+                    <input type="text" id="contact" placeholder="Email or 10-digit phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="password" placeholder="Create password (min 6 characters)" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>📝 Exam Type</label>
+                    <select id="examType" required>
+                        <option value="">Select your exam</option>
+                        <option value="VDO">VDO (Village Development Officer)</option>
+                        <option value="SSC">SSC (Staff Selection Commission)</option>
+                        <option value="UPSC">UPSC (Civil Services)</option>
+                        <option value="Teaching">Teaching Exams</option>
+                        <option value="Banking">Banking Exams</option>
+                        <option value="Railway">Railway Exams</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>🌍 City</label>
+                    <input type="text" id="city" placeholder="Your city name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>🗣️ Preferred Language</label>
+                    <select id="language" required>
+                        <option value="">Select language</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="English">English</option>
+                        <option value="Both">Both (Hindi + English)</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-submit">🚀 Create Account</button>
+                
+                <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made with ❤️ for Exam Aspirants | © 2026 Exam Buddy Finder</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
