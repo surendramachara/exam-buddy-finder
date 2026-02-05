@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="logo">📚 Exam Buddy</h2>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-icon" onclick="toggleNotifications()">
+                🔔
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <div class="user-avatar">👤</div>
+                <span class="user-name" id="userName">User</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="dashboard.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <span class="icon">👤</span>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="find-buddies.html">
+                    <span class="icon">👥</span>
+                    <span class="text">Find Buddies</span>
+                </a>
+            </li>
+            <li>
+                <a href="groups.html">
+                    <span class="icon">📚</span>
+                    <span class="text">Study Groups</span>
+                </a>
+            </li>
+            <li>
+                <a href="resources.html">
+                    <span class="icon">📖</span>
+                    <span class="text">Resources</span>
+                </a>
+            </li>
+            <li>
+                <a href="doubts.html">
+                    <span class="icon">❓</span>
+                    <span class="text">Doubt Forum</span>
+                </a>
+            </li>
+            <li>
+                <a href="progress.html">
+                    <span class="icon">📊</span>
+                    <span class="text">My Progress</span>
+                </a>
+            </li>
+            <li>
+                <a href="leaderboard.html">
+                    <span class="icon">🏆</span>
+                    <span class="text">Leaderboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="tests.html">
+                    <span class="icon">🎯</span>
+                    <span class="text">Mock Tests</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" onclick="logout()">
+                    <span class="icon">🚪</span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-text">
+                <h1>Welcome back, <span id="dashboardUserName">Student</span>! 👋</h1>
+                <p>Let's continue your study journey today</p>
+            </div>
+            <div class="quick-actions">
+                <button class="btn-quick" onclick="alert('Find Buddies - Coming in next session!')">
+                    👥 Find Buddies
+                </button>
+                <button class="btn-quick" onclick="alert('Join Group - Coming soon!')">
+                    📚 Join Group
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats Cards -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3 id="studyStreak">0</h3>
+                    <p>Day Streak</p>
+                </div>
+                <div class="stat-trend">🔥</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3 id="studyHours">0</h3>
+                    <p>Study Hours</p>
+                </div>
+                <div class="stat-trend">📈</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3 id="totalBuddies">0</h3>
+                    <p>Study Buddies</p>
+                </div>
+                <div class="stat-trend">🤝</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <h3 id="totalGroups">0</h3>
+                    <p>Groups Joined</p>
+                </div>
+                <div class="stat-trend">✅</div>
+            </div>
+        </section>
+
+        <!-- Today's Summary -->
+        <section class="summary-section">
+            <div class="section-header">
+                <h2>📊 Today's Summary</h2>
+                <button class="btn-view-all" onclick="alert('Progress page - Coming soon!')">View All</button>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon">✅</div>
+                    <div class="summary-details">
+                        <h4>Daily Check-in</h4>
+                        <p id="checkInStatus">Not checked in yet</p>
+                        <button class="btn-check-in" onclick="dailyCheckIn()">Check In Now</button>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">🎯</div>
+                    <div class="summary-details">
+                        <h4>Today's Goal</h4>
+                        <p>Study 3 hours</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 33%"></div>
+                        </div>
+                        <span class="progress-text">1/3 hours completed</span>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">📖</div>
+                    <div class="summary-details">
+                        <h4>Topics Covered</h4>
+                        <p>Indian Polity, Modern History</p>
+                        <span class="badge">2 topics</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="activity-section">
+            <div class="section-header">
+                <h2>🔔 Recent Activity</h2>
+                <button class="btn-view-all" onclick="alert('All activities - Coming soon!')">View All</button>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">👋</div>
+                    <div class="activity-content">
+                        <h4>Welcome to Exam Buddy!</h4>
+                        <p>Your account has been created successfully</p>
+                        <span class="activity-time">Just now</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">🎯</div>
+                    <div class="activity-content">
+                        <h4>Set Your Goals</h4>
+                        <p>Define your daily study targets to stay on track</p>
+                        <span class="activity-time">5 mins ago</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">👥</div>
+                    <div class="activity-content">
+                        <h4>Find Study Partners</h4>
+                        <p>Connect with students preparing for <span id="userExam">VDO</span></p>
+                        <span class="activity-time">10 mins ago</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="quick-links-section">
+            <h2>🚀 Quick Links</h2>
+            <div class="quick-links-grid">
+                <a href="#" class="quick-link-card" onclick="alert('Coming in next session!')">
+                    <span class="link-icon">📝</span>
+                    <h4>Post a Doubt</h4>
+                    <p>Get help from peers</p>
+                </a>
+
+                <a href="#" class="quick-link-card" onclick="alert('Coming soon!')">
+                    <span class="link-icon">📚</span>
+                    <h4>Upload Notes</h4>
+                    <p>Share your resources</p>
+                </a>
+
+                <a href="#" class="quick-link-card" onclick="alert('Coming soon!')">
+                    <span class="link-icon">🎯</span>
+                    <h4>Take a Test</h4>
+                    <p>Practice questions</p>
+                </a>
+
+                <a href="#" class="quick-link-card" onclick="alert('Coming soon!')">
+                    <span class="link-icon">📊</span>
+                    <h4>View Analytics</h4>
+                    <p>Track your progress</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item unread">
+                <span class="notif-icon">🎉</span>
+                <div class="notif-content">
+                    <h4>Welcome to Exam Buddy!</h4>
+                    <p>Start by finding your study partners</p>
+                    <span class="notif-time">Just now</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <span class="notif-icon">👥</span>
+                <div class="notif-content">
+                    <h4>New features available</h4>
+                    <p>Check out the study groups section</p>
+                    <span class="notif-time">1 hour ago</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <span class="notif-icon">📚</span>
+                <div class="notif-content">
+                    <h4>Study tip of the day</h4>
+                    <p>Take regular breaks to improve focus</p>
+                    <span class="notif-time">2 hours ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Menu Dropdown -->
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+            <div class="user-avatar-large">👤</div>
+            <div class="user-info">
+                <h4 id="dropdownUserName">User</h4>
+                <p id="dropdownUserEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-dropdown-menu">
+            <li><a href="profile.html">👤 My Profile</a></li>
+            <li><a href="#" onclick="alert('Settings - Coming soon!')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="alert('Help - Coming soon!')">❓ Help & Support</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeAllDropdowns()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
