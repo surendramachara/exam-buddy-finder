@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="logo">📚 Exam Buddy</h2>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-icon" onclick="toggleNotifications()">
+                🔔
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <div class="user-avatar">👤</div>
+                <span class="user-name" id="userName">User</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="profile.html">
+                    <span class="icon">👤</span>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="find-buddies.html">
+                    <span class="icon">👥</span>
+                    <span class="text">Find Buddies</span>
+                </a>
+            </li>
+            <li>
+                <a href="groups.html">
+                    <span class="icon">📚</span>
+                    <span class="text">Study Groups</span>
+                </a>
+            </li>
+            <li>
+                <a href="resources.html">
+                    <span class="icon">📖</span>
+                    <span class="text">Resources</span>
+                </a>
+            </li>
+            <li>
+                <a href="doubts.html">
+                    <span class="icon">❓</span>
+                    <span class="text">Doubt Forum</span>
+                </a>
+            </li>
+            <li>
+                <a href="progress.html">
+                    <span class="icon">📊</span>
+                    <span class="text">My Progress</span>
+                </a>
+            </li>
+            <li>
+                <a href="leaderboard.html">
+                    <span class="icon">🏆</span>
+                    <span class="text">Leaderboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="tests.html">
+                    <span class="icon">🎯</span>
+                    <span class="text">Mock Tests</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" onclick="logout()">
+                    <span class="icon">🚪</span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>👤 My Profile</h1>
+            <button class="btn-edit-mode" id="editModeBtn" onclick="toggleEditMode()">
+                ✏️ Edit Profile
+            </button>
+        </div>
+
+        <!-- Profile Container -->
+        <div class="profile-container">
+            <!-- Left Column - Profile Card -->
+            <div class="profile-left">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar-large">
+                            <span id="avatarLetter">U</span>
+                        </div>
+                        <button class="btn-change-avatar" onclick="alert('Profile picture upload - Coming soon!')">
+                            📷 Change Photo
+                        </button>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h2 id="profileName">User Name</h2>
+                        <p class="profile-role" id="profileExam">VDO Aspirant</p>
+                        <p class="profile-location">📍 <span id="profileCity">City</span></p>
+                        <p class="profile-joined">🗓️ Joined: <span id="profileJoinDate">Feb 2026</span></p>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <h3 id="profileStreak">0</h3>
+                            <p>Day Streak</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 id="profileHours">0</h3>
+                            <p>Study Hours</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 id="profileRank">-</h3>
+                            <p>Rank</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-badges">
+                        <h4>🏆 Achievements</h4>
+                        <div class="badges-grid">
+                            <div class="badge-item" title="Early Bird">
+                                🌅
+                                <span>Early Bird</span>
+                            </div>
+                            <div class="badge-item" title="7 Day Streak">
+                                🔥
+                                <span>Week Warrior</span>
+                            </div>
+                            <div class="badge-item locked" title="Locked - Get 30 day streak">
+                                🔒
+                                <span>Monthly Hero</span>
+                            </div>
+                            <div class="badge-item locked" title="Locked - Help 10 students">
+                                🔒
+                                <span>Helpful Hand</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Details & Edit -->
+            <div class="profile-right">
+                <!-- Personal Information -->
+                <div class="profile-section">
+                    <h3>📝 Personal Information</h3>
+                    
+                    <div class="profile-view" id="profileView">
+                        <div class="info-row">
+                            <label>Full Name:</label>
+                            <span id="displayName">-</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Email/Phone:</label>
+                            <span id="displayContact">-</span>
+                        </div>
+                        <div class="info-row">
+                            <label>City:</label>
+                            <span id="displayCity">-</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Language:</label>
+                            <span id="displayLanguage">-</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Bio:</label>
+                            <span id="displayBio" class="bio-text">No bio added yet</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-edit" id="profileEdit" style="display: none;">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="editName" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email/Phone</label>
+                            <input type="text" id="editContact" placeholder="Email or phone" disabled>
+                            <small>Contact cannot be changed</small>
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="editCity" placeholder="Your city">
+                        </div>
+                        <div class="form-group">
+                            <label>Language</label>
+                            <select id="editLanguage">
+                                <option value="Hindi">Hindi</option>
+                                <option value="English">English</option>
+                                <option value="Both">Both (Hindi + English)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea id="editBio" placeholder="Tell us about yourself, your goals, study routine..." rows="4"></textarea>
+                            <small id="bioCount">0/200 characters</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Preferences -->
+                <div class="profile-section">
+                    <h3>🎯 Study Preferences</h3>
+                    
+                    <div class="profile-view" id="prefView">
+                        <div class="info-row">
+                            <label>Exam Type:</label>
+                            <span id="displayExam">-</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Study Time:</label>
+                            <span id="displayStudyTime">Not set</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Daily Goal:</label>
+                            <span id="displayGoal">Not set</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Favorite Subjects:</label>
+                            <span id="displaySubjects">None selected</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-edit" id="prefEdit" style="display: none;">
+                        <div class="form-group">
+                            <label>Exam Type</label>
+                            <select id="editExam">
+                                <option value="VDO">VDO (Village Development Officer)</option>
+                                <option value="SSC">SSC (Staff Selection Commission)</option>
+                                <option value="UPSC">UPSC (Civil Services)</option>
+                                <option value="Teaching">Teaching Exams</option>
+                                <option value="Banking">Banking Exams</option>
+                                <option value="Railway">Railway Exams</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Study Time</label>
+                            <select id="editStudyTime">
+                                <option value="">Select time</option>
+                                <option value="Morning">Morning (5 AM - 11 AM)</option>
+                                <option value="Afternoon">Afternoon (12 PM - 5 PM)</option>
+                                <option value="Evening">Evening (6 PM - 9 PM)</option>
+                                <option value="Night">Night (10 PM - 2 AM)</option>
+                                <option value="Flexible">Flexible</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Daily Study Goal (hours)</label>
+                            <input type="number" id="editGoal" min="1" max="12" placeholder="e.g., 3">
+                        </div>
+                        <div class="form-group">
+                            <label>Favorite Subjects (comma separated)</label>
+                            <input type="text" id="editSubjects" placeholder="e.g., Polity, History, Geography">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="profile-section">
+                    <h3>⚙️ Account Settings</h3>
+                    
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🔔 Notifications</h4>
+                                <p>Email & push notifications</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notifToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🌙 Dark Mode</h4>
+                                <p>Switch to dark theme</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🔒 Change Password</h4>
+                                <p>Update your password</p>
+                            </div>
+                            <button class="btn-setting" onclick="alert('Change password - Coming soon!')">
+                                Change
+                            </button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>🗑️ Delete Account</h4>
+                                <p>Permanently delete your account</p>
+                            </div>
+                            <button class="btn-setting btn-danger" onclick="confirmDelete()">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save/Cancel Buttons (Edit Mode) -->
+                <div class="profile-actions" id="profileActions" style="display: none;">
+                    <button class="btn-cancel" onclick="cancelEdit()">Cancel</button>
+                    <button class="btn-save" onclick="saveProfile()">💾 Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Dropdown (Reuse from dashboard) -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <span class="notif-icon">👤</span>
+                <div class="notif-content">
+                    <h4>Profile Updated</h4>
+                    <p>Your profile information has been saved</p>
+                    <span class="notif-time">Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Menu Dropdown (Reuse from dashboard) -->
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+            <div class="user-avatar-large">👤</div>
+            <div class="user-info">
+                <h4 id="dropdownUserName">User</h4>
+                <p id="dropdownUserEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-dropdown-menu">
+            <li><a href="profile.html">👤 My Profile</a></li>
+            <li><a href="#" onclick="alert('Settings - Coming soon!')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="alert('Help - Coming soon!')">❓ Help & Support</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeAllDropdowns()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
