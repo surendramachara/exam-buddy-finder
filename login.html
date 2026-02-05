@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="login-navbar">
+        <div class="logo">
+            <h2>📚 Exam Buddy</h2>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="index.html#register">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Login Container -->
+    <div class="login-page">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>👋 Welcome Back!</h1>
+                <p>Login to continue your study journey</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginContact">📧 Email or Phone</label>
+                    <input 
+                        type="text" 
+                        id="loginContact" 
+                        placeholder="Enter your email or phone"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">🔒 Password</label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                    <div class="password-toggle" onclick="togglePassword()">
+                        <span id="toggleIcon">👁️</span>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-login-submit">
+                    🚀 Login Now
+                </button>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <button type="button" class="btn-demo" onclick="loginAsDemo()">
+                    🎯 Try Demo Account
+                </button>
+
+                <p class="signup-link">
+                    Don't have an account? 
+                    <a href="index.html#register">Create one here</a>
+                </p>
+            </form>
+
+            <div class="login-features">
+                <div class="feature-item">
+                    <span>✅</span>
+                    <p>Find study partners</p>
+                </div>
+                <div class="feature-item">
+                    <span>✅</span>
+                    <p>Join study groups</p>
+                </div>
+                <div class="feature-item">
+                    <span>✅</span>
+                    <p>Track your progress</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Image/Info (Optional for mobile) -->
+        <div class="login-info">
+            <div class="info-content">
+                <h2>🎓 Study Together, Succeed Together!</h2>
+                <p>Join thousands of students preparing for competitive exams</p>
+                <div class="stats-mini">
+                    <div class="stat-mini">
+                        <h3>500+</h3>
+                        <p>Active Students</p>
+                    </div>
+                    <div class="stat-mini">
+                        <h3>50+</h3>
+                        <p>Study Groups</p>
+                    </div>
+                    <div class="stat-mini">
+                        <h3>95%</h3>
+                        <p>Success Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loader"></div>
+        <p>Logging in...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
