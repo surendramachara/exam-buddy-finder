@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="logo">📚 Exam Buddy</h2>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-icon" onclick="toggleNotifications()">
+                🔔
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <div class="user-avatar">👤</div>
+                <span class="user-name" id="userName">User</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <span class="icon">👤</span>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="find-buddies.html">
+                    <span class="icon">👥</span>
+                    <span class="text">Find Buddies</span>
+                </a>
+            </li>
+            <li>
+                <a href="groups.html">
+                    <span class="icon">📚</span>
+                    <span class="text">Study Groups</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="resources.html">
+                    <span class="icon">📖</span>
+                    <span class="text">Resources</span>
+                </a>
+            </li>
+            <li>
+                <a href="doubts.html">
+                    <span class="icon">❓</span>
+                    <span class="text">Doubt Forum</span>
+                </a>
+            </li>
+            <li>
+                <a href="progress.html">
+                    <span class="icon">📊</span>
+                    <span class="text">My Progress</span>
+                </a>
+            </li>
+            <li>
+                <a href="leaderboard.html">
+                    <span class="icon">🏆</span>
+                    <span class="text">Leaderboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="tests.html">
+                    <span class="icon">🎯</span>
+                    <span class="text">Mock Tests</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" onclick="logout()">
+                    <span class="icon">🚪</span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>📖 Study Resources</h1>
+                <p class="page-subtitle">Access notes, PDFs, videos and study materials</p>
+            </div>
+            <button class="btn-primary" onclick="openUploadModal()">
+                ➕ Upload Resource
+            </button>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="resources-stats">
+            <div class="stat-card-small">
+                <div class="stat-icon-small">📄</div>
+                <div class="stat-info-small">
+                    <h3 id="totalResources">24</h3>
+                    <p>Total Resources</p>
+                </div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-icon-small">⬇️</div>
+                <div class="stat-info-small">
+                    <h3 id="totalDownloads">156</h3>
+                    <p>Downloads</p>
+                </div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-icon-small">⭐</div>
+                <div class="stat-info-small">
+                    <h3 id="avgRating">4.5</h3>
+                    <p>Avg Rating</p>
+                </div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-icon-small">🔖</div>
+                <div class="stat-info-small">
+                    <h3 id="bookmarkedCount">8</h3>
+                    <p>Bookmarked</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>🔍 Filters</h3>
+                <button class="btn-reset-filters" onclick="resetResourceFilters()">Reset All</button>
+            </div>
+            
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>📝 Exam Type</label>
+                    <select id="filterResourceExam" onchange="applyResourceFilters()">
+                        <option value="">All Exams</option>
+                        <option value="VDO">VDO</option>
+                        <option value="SSC">SSC</option>
+                        <option value="UPSC">UPSC</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Railway">Railway</option>
+                        <option value="Teaching">Teaching</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>📖 Subject</label>
+                    <select id="filterResourceSubject" onchange="applyResourceFilters()">
+                        <option value="">All Subjects</option>
+                        <option value="Indian Polity">Indian Polity</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Economics">Economics</option>
+                        <option value="General Science">General Science</option>
+                        <option value="Current Affairs">Current Affairs</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Reasoning">Reasoning</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>📁 Resource Type</label>
+                    <select id="filterResourceType" onchange="applyResourceFilters()">
+                        <option value="">All Types</option>
+                        <option value="PDF">📄 PDF Notes</option>
+                        <option value="Video">🎥 Video</option>
+                        <option value="Link">🔗 Web Link</option>
+                        <option value="Image">🖼️ Image</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>🔍 Search</label>
+                    <input type="text" id="filterResourceSearch" placeholder="Search resources..." onkeyup="applyResourceFilters()">
+                </div>
+            </div>
+
+            <div class="filter-stats">
+                <p>Showing <strong id="resourceResultCount">0</strong> resources</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchResourceTab('all')">
+                All Resources <span class="tab-badge" id="allResourcesCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchResourceTab('my-uploads')">
+                My Uploads <span class="tab-badge" id="myUploadsCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchResourceTab('bookmarked')">
+                Bookmarked <span class="tab-badge" id="bookmarkedResourcesCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchResourceTab('popular')">
+                Popular <span class="tab-badge">🔥</span>
+            </button>
+        </div>
+
+        <!-- Resources Grid -->
+        <div class="resources-container" id="resourcesContainer">
+            <div class="loading-state">
+                <div class="loader"></div>
+                <p>Loading resources...</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyResourceState" style="display: none;">
+            <div class="empty-icon">📚</div>
+            <h3>No resources found</h3>
+            <p>Try adjusting your filters or upload a new resource</p>
+            <button class="btn-primary" onclick="openUploadModal()" style="margin-top: 1rem;">
+                ➕ Upload Resource
+            </button>
+        </div>
+    </main>
+
+    <!-- Upload Resource Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-content upload-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeUploadModal()">✕</button>
+            
+            <div class="modal-header-simple">
+                <h2>➕ Upload Resource</h2>
+                <p>Share your study materials with the community</p>
+            </div>
+
+            <form id="uploadResourceForm" class="upload-form" onsubmit="event.preventDefault(); uploadResource();">
+                <div class="form-group">
+                    <label>📝 Resource Title *</label>
+                    <input type="text" id="resourceTitle" placeholder="e.g., Indian Polity Notes - Complete" required maxlength="100">
+                    <small>Max 100 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label>📄 Description *</label>
+                    <textarea id="resourceDesc" placeholder="Describe what's in this resource..." rows="4" required maxlength="300"></textarea>
+                    <small id="resourceDescCount">0/300 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Exam Type *</label>
+                    <select id="resourceExam" required>
+                        <option value="">Select exam</option>
+                        <option value="VDO">VDO</option>
+                        <option value="SSC">SSC</option>
+                        <option value="UPSC">UPSC</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Railway">Railway</option>
+                        <option value="Teaching">Teaching</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📖 Subject *</label>
+                    <select id="resourceSubject" required>
+                        <option value="">Select subject</option>
+                        <option value="Indian Polity">Indian Polity</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Economics">Economics</option>
+                        <option value="General Science">General Science</option>
+                        <option value="Current Affairs">Current Affairs</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Reasoning">Reasoning</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📁 Resource Type *</label>
+                    <select id="resourceType" required onchange="toggleUploadFields()">
+                        <option value="">Select type</option>
+                        <option value="PDF">📄 PDF Document</option>
+                        <option value="Video">🎥 Video Link</option>
+                        <option value="Link">🔗 Web Link</option>
+                        <option value="Image">🖼️ Image</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="urlField" style="display: none;">
+                    <label>🔗 Resource URL *</label>
+                    <input type="url" id="resourceUrl" placeholder="https://example.com/resource">
+                    <small>For videos (YouTube, etc.) and web links</small>
+                </div>
+
+                <div class="form-group" id="fileField" style="display: none;">
+                    <label>📎 Upload File *</label>
+                    <div class="file-upload-area">
+                        <input type="file" id="resourceFile" accept=".pdf,.jpg,.jpeg,.png">
+                        <p>📁 Click to select file or drag & drop</p>
+                        <small>Supported: PDF, JPG, PNG (Max 10MB)</small>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeUploadModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Upload Resource</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resource Detail Modal -->
+    <div class="modal-overlay" id="resourceDetailModal">
+        <div class="modal-content resource-detail-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeResourceDetailModal()">✕</button>
+            
+            <div class="resource-detail-header">
+                <div class="resource-detail-icon" id="detailResourceIcon">📄</div>
+                <div class="resource-detail-info">
+                    <h2 id="detailResourceTitle">Resource Title</h2>
+                    <div class="resource-detail-meta">
+                        <span id="detailResourceExam">VDO</span>
+                        <span>•</span>
+                        <span id="detailResourceSubject">Polity</span>
+                        <span>•</span>
+                        <span id="detailResourceType">PDF</span>
+                    </div>
+                    <div class="resource-rating">
+                        <span class="stars" id="detailResourceStars">⭐⭐⭐⭐⭐</span>
+                        <span id="detailResourceRating">4.5</span>
+                        <span>(<span id="detailResourceReviews">12</span> reviews)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-detail-body">
+                <div class="resource-detail-section">
+                    <h4>📝 Description</h4>
+                    <p id="detailResourceDesc">Resource description...</p>
+                </div>
+
+                <div class="resource-detail-section">
+                    <h4>👤 Uploaded By</h4>
+                    <p id="detailResourceUploader">User Name</p>
+                </div>
+
+                <div class="resource-detail-section">
+                    <h4>📊 Stats</h4>
+                    <div class="resource-stats-grid">
+                        <div class="resource-stat-item">
+                            <strong id="detailResourceDownloads">45</strong>
+                            <p>Downloads</p>
+                        </div>
+                        <div class="resource-stat-item">
+                            <strong id="detailResourceViews">120</strong>
+                            <p>Views</p>
+                        </div>
+                        <div class="resource-stat-item">
+                            <strong id="detailResourceDate">2 days ago</strong>
+                            <p>Uploaded</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-detail-footer">
+                <button class="btn-modal-action btn-bookmark" id="detailBookmarkBtn" onclick="toggleResourceBookmark()">
+                    🔖 Bookmark
+                </button>
+                <button class="btn-modal-action btn-download" onclick="downloadResource()">
+                    ⬇️ Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification/User Dropdowns -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <span class="notif-icon">📖</span>
+                <div class="notif-content">
+                    <h4>New resource uploaded!</h4>
+                    <p>Check out the latest study materials</p>
+                    <span class="notif-time">Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+            <div class="user-avatar-large">👤</div>
+            <div class="user-info">
+                <h4 id="dropdownUserName">User</h4>
+                <p id="dropdownUserEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-dropdown-menu">
+            <li><a href="profile.html">👤 My Profile</a></li>
+            <li><a href="#" onclick="alert('Settings - Coming soon!')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="alert('Help - Coming soon!')">❓ Help & Support</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAllDropdowns()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
