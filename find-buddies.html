@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Buddies - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="logo">📚 Exam Buddy</h2>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-icon" onclick="toggleNotifications()">
+                🔔
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <div class="user-avatar">👤</div>
+                <span class="user-name" id="userName">User</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <span class="icon">👤</span>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="find-buddies.html">
+                    <span class="icon">👥</span>
+                    <span class="text">Find Buddies</span>
+                </a>
+            </li>
+            <li>
+                <a href="groups.html">
+                    <span class="icon">📚</span>
+                    <span class="text">Study Groups</span>
+                </a>
+            </li>
+            <li>
+                <a href="resources.html">
+                    <span class="icon">📖</span>
+                    <span class="text">Resources</span>
+                </a>
+            </li>
+            <li>
+                <a href="doubts.html">
+                    <span class="icon">❓</span>
+                    <span class="text">Doubt Forum</span>
+                </a>
+            </li>
+            <li>
+                <a href="progress.html">
+                    <span class="icon">📊</span>
+                    <span class="text">My Progress</span>
+                </a>
+            </li>
+            <li>
+                <a href="leaderboard.html">
+                    <span class="icon">🏆</span>
+                    <span class="text">Leaderboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="tests.html">
+                    <span class="icon">🎯</span>
+                    <span class="text">Mock Tests</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" onclick="logout()">
+                    <span class="icon">🚪</span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>👥 Find Buddies</h1>
+                <p class="page-subtitle">Connect with like-minded people</p>
+            </div>
+            <button class="btn-view-mode" onclick="toggleViewMode()">
+                <span id="viewModeIcon">📋</span> <span id="viewModeText">Grid View</span>
+            </button>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>🔍 Filters</h3>
+                <button class="btn-reset-filters" onclick="resetFilters()">Reset All</button>
+            </div>
+            
+            <div class="filters-grid">
+                <!-- User Type -->
+                <div class="filter-group">
+                    <label>👤 User Type</label>
+                    <select id="filterUserType" onchange="onUserTypeChange()">
+                        <option value="">All Users</option>
+                        <option value="Student">👨‍🎓 Student</option>
+                        <option value="Government Servant">🏛️ Government Servant</option>
+                        <option value="Professional">💼 Professional/Other</option>
+                    </select>
+                </div>
+
+                <!-- Category (Dynamic based on User Type) -->
+                <div class="filter-group">
+                    <label>📚 Category</label>
+                    <select id="filterCategory" onchange="applyFilters()">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <!-- Current Location - State -->
+                <div class="filter-group">
+                    <label>📍 Current State</label>
+                    <select id="filterCurrentState" onchange="onCurrentStateChange()">
+                        <option value="">All States</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Current Location - District -->
+                <div class="filter-group">
+                    <label>🏙️ Current District</label>
+                    <select id="filterCurrentDistrict" onchange="applyFilters()">
+                        <option value="">All Districts</option>
+                    </select>
+                </div>
+
+                <!-- Language -->
+                <div class="filter-group">
+                    <label>🗣️ Language</label>
+                    <select id="filterLanguage" onchange="applyFilters()">
+                        <option value="">All Languages</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="English">English</option>
+                        <option value="Both">Both (Hindi + English)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Advanced Filters (Collapsible) -->
+            <div class="advanced-filters-toggle">
+                <button class="btn-toggle-advanced" onclick="toggleAdvancedFilters()">
+                    <span id="advancedToggleIcon">▼</span> Birth Location (Optional)
+                </button>
+            </div>
+
+            <div class="advanced-filters" id="advancedFilters" style="display: none;">
+                <div class="filters-grid">
+                    <!-- Birth Location - State -->
+                    <div class="filter-group">
+                        <label>🏠 Birth State</label>
+                        <select id="filterBirthState" onchange="onBirthStateChange()">
+                            <option value="">All States</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Birth Location - District -->
+                    <div class="filter-group">
+                        <label>🏘️ Birth District</label>
+                        <select id="filterBirthDistrict" onchange="applyFilters()">
+                            <option value="">All Districts</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-stats">
+                <p>Showing <strong id="resultCount">0</strong> people</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('all')">
+                All People <span class="tab-badge" id="allCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('connected')">
+                My Buddies <span class="tab-badge" id="connectedCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('pending')">
+                Pending <span class="tab-badge" id="pendingCount">0</span>
+            </button>
+        </div>
+
+        <!-- People Container -->
+        <div class="students-container" id="studentsContainer">
+            <div class="loading-state">
+                <div class="loader"></div>
+                <p>Loading people...</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">😕</div>
+            <h3>No one found</h3>
+            <p>Try adjusting your filters</p>
+        </div>
+    </main>
+
+    <!-- Person Detail Modal -->
+    <div class="modal-overlay" id="studentModal" onclick="closeStudentModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeStudentModal()">✕</button>
+            
+            <div class="modal-header">
+                <div class="modal-avatar">
+                    <span id="modalAvatarLetter">U</span>
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalName">Name</h2>
+                    <p id="modalCategory">Category</p>
+                    <p class="modal-location">
+                        📍 <span id="modalCurrentLocation">Location</span>
+                    </p>
+                    <p class="modal-location" id="modalBirthLocationContainer" style="display: none;">
+                        🏠 Born: <span id="modalBirthLocation">Birth Location</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>📝 Bio</h4>
+                    <p id="modalBio">No bio available</p>
+                </div>
+
+                <div class="modal-section">
+                    <h4>ℹ️ Details</h4>
+                    <div class="modal-details">
+                        <div class="detail-item">
+                            <span class="detail-label">User Type:</span>
+                            <span class="detail-value" id="modalUserType">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Language:</span>
+                            <span class="detail-value" id="modalLanguage">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h4>📊 Stats</h4>
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <h3 id="modalStreak">0</h3>
+                            <p>Day Streak</p>
+                        </div>
+                        <div class="modal-stat">
+                            <h3 id="modalHours">0</h3>
+                            <p>Active Hours</p>
+                        </div>
+                        <div class="modal-stat">
+                            <h3 id="modalRank">-</h3>
+                            <p>Rank</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal-action btn-connect" id="modalConnectBtn" onclick="sendConnectRequest()">
+                    🤝 Connect
+                </button>
+                <button class="btn-modal-action btn-message" onclick="alert('Messaging - Coming soon!')">
+                    💬 Message
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification/User Dropdowns (Reuse from dashboard) -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <span class="notif-icon">👥</span>
+                <div class="notif-content">
+                    <h4>New connection!</h4>
+                    <p>Someone accepted your request</p>
+                    <span class="notif-time">Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+            <div class="user-avatar-large">👤</div>
+            <div class="user-info">
+                <h4 id="dropdownUserName">User</h4>
+                <p id="dropdownUserEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-dropdown-menu">
+            <li><a href="profile.html">👤 My Profile</a></li>
+            <li><a href="#" onclick="alert('Settings - Coming soon!')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="alert('Help - Coming soon!')">❓ Help & Support</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAllDropdowns()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
