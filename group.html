@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Groups - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="logo">📚 Exam Buddy</h2>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-icon" onclick="toggleNotifications()">
+                🔔
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <div class="user-avatar">👤</div>
+                <span class="user-name" id="userName">User</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <span class="icon">👤</span>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="find-buddies.html">
+                    <span class="icon">👥</span>
+                    <span class="text">Find Buddies</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="groups.html">
+                    <span class="icon">📚</span>
+                    <span class="text">Study Groups</span>
+                </a>
+            </li>
+            <li>
+                <a href="resources.html">
+                    <span class="icon">📖</span>
+                    <span class="text">Resources</span>
+                </a>
+            </li>
+            <li>
+                <a href="doubts.html">
+                    <span class="icon">❓</span>
+                    <span class="text">Doubt Forum</span>
+                </a>
+            </li>
+            <li>
+                <a href="progress.html">
+                    <span class="icon">📊</span>
+                    <span class="text">My Progress</span>
+                </a>
+            </li>
+            <li>
+                <a href="leaderboard.html">
+                    <span class="icon">🏆</span>
+                    <span class="text">Leaderboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="tests.html">
+                    <span class="icon">🎯</span>
+                    <span class="text">Mock Tests</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" onclick="logout()">
+                    <span class="icon">🚪</span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>📚 Study Groups</h1>
+                <p class="page-subtitle">Join groups or create your own study community</p>
+            </div>
+            <button class="btn-primary" onclick="openCreateGroupModal()">
+                ➕ Create Group
+            </button>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>🔍 Filters</h3>
+                <button class="btn-reset-filters" onclick="resetGroupFilters()">Reset All</button>
+            </div>
+            
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>📝 Exam Type</label>
+                    <select id="filterGroupExam" onchange="applyGroupFilters()">
+                        <option value="">All Exams</option>
+                        <option value="VDO">VDO</option>
+                        <option value="SSC">SSC</option>
+                        <option value="UPSC">UPSC</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Railway">Railway</option>
+                        <option value="Teaching">Teaching</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>📖 Subject</label>
+                    <select id="filterGroupSubject" onchange="applyGroupFilters()">
+                        <option value="">All Subjects</option>
+                        <option value="Indian Polity">Indian Polity</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Economics">Economics</option>
+                        <option value="General Science">General Science</option>
+                        <option value="Current Affairs">Current Affairs</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Reasoning">Reasoning</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>🔒 Group Type</label>
+                    <select id="filterGroupType" onchange="applyGroupFilters()">
+                        <option value="">All Types</option>
+                        <option value="Public">Public (Anyone can join)</option>
+                        <option value="Private">Private (Approval needed)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>🔍 Search Groups</label>
+                    <input type="text" id="filterGroupName" placeholder="Search by name..." onkeyup="applyGroupFilters()">
+                </div>
+            </div>
+
+            <div class="filter-stats">
+                <p>Showing <strong id="groupResultCount">0</strong> groups</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchGroupTab('all')">
+                All Groups <span class="tab-badge" id="allGroupsCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchGroupTab('my-groups')">
+                My Groups <span class="tab-badge" id="myGroupsCount">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchGroupTab('popular')">
+                Popular <span class="tab-badge">🔥</span>
+            </button>
+        </div>
+
+        <!-- Groups Grid -->
+        <div class="groups-container" id="groupsContainer">
+            <!-- Groups will be loaded here by JavaScript -->
+            <div class="loading-state">
+                <div class="loader"></div>
+                <p>Loading groups...</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyGroupState" style="display: none;">
+            <div class="empty-icon">📚</div>
+            <h3>No groups found</h3>
+            <p>Try adjusting your filters or create a new group</p>
+            <button class="btn-primary" onclick="openCreateGroupModal()" style="margin-top: 1rem;">
+                ➕ Create First Group
+            </button>
+        </div>
+    </main>
+
+    <!-- Create Group Modal -->
+    <div class="modal-overlay" id="createGroupModal">
+        <div class="modal-content create-group-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeCreateGroupModal()">✕</button>
+            
+            <div class="modal-header-simple">
+                <h2>➕ Create New Group</h2>
+                <p>Start your own study community</p>
+            </div>
+
+            <form id="createGroupForm" class="create-group-form" onsubmit="event.preventDefault(); createNewGroup();">
+                <div class="form-group">
+                    <label>📝 Group Name *</label>
+                    <input type="text" id="newGroupName" placeholder="e.g., VDO 2026 Preparation" required maxlength="50">
+                    <small>Max 50 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label>📄 Description *</label>
+                    <textarea id="newGroupDesc" placeholder="Describe the purpose of this group..." rows="4" required maxlength="200"></textarea>
+                    <small id="descCount">0/200 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Exam Type *</label>
+                    <select id="newGroupExam" required>
+                        <option value="">Select exam type</option>
+                        <option value="VDO">VDO</option>
+                        <option value="SSC">SSC</option>
+                        <option value="UPSC">UPSC</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Railway">Railway</option>
+                        <option value="Teaching">Teaching</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📖 Primary Subject *</label>
+                    <select id="newGroupSubject" required>
+                        <option value="">Select subject</option>
+                        <option value="Indian Polity">Indian Polity</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Economics">Economics</option>
+                        <option value="General Science">General Science</option>
+                        <option value="Current Affairs">Current Affairs</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Reasoning">Reasoning</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="All Subjects">All Subjects</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>🔒 Group Type *</label>
+                    <select id="newGroupType" required>
+                        <option value="">Select type</option>
+                        <option value="Public">Public - Anyone can join instantly</option>
+                        <option value="Private">Private - Admin approval required</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>👥 Maximum Members</label>
+                    <input type="number" id="newGroupMaxMembers" min="5" max="100" value="50" placeholder="50">
+                    <small>Min: 5, Max: 100</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCreateGroupModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Create Group</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Group Detail Modal -->
+    <div class="modal-overlay" id="groupDetailModal">
+        <div class="modal-content group-detail-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeGroupDetailModal()">✕</button>
+            
+            <div class="group-detail-header">
+                <div class="group-detail-icon">📚</div>
+                <div class="group-detail-info">
+                    <h2 id="detailGroupName">Group Name</h2>
+                    <div class="group-detail-meta">
+                        <span id="detailGroupExam">VDO</span>
+                        <span>•</span>
+                        <span id="detailGroupSubject">All Subjects</span>
+                        <span>•</span>
+                        <span id="detailGroupType">Public</span>
+                    </div>
+                    <p class="group-detail-members">
+                        👥 <span id="detailMemberCount">0</span> members
+                    </p>
+                </div>
+            </div>
+
+            <div class="group-detail-body">
+                <div class="group-detail-section">
+                    <h4>📄 About</h4>
+                    <p id="detailGroupDesc">Group description will appear here...</p>
+                </div>
+
+                <div class="group-detail-section">
+                    <h4>👤 Created By</h4>
+                    <p id="detailGroupAdmin">Admin Name</p>
+                </div>
+
+                <div class="group-detail-section">
+                    <h4>📅 Created</h4>
+                    <p id="detailGroupDate">Date</p>
+                </div>
+
+                <div class="group-detail-section">
+                    <h4>💬 Recent Activity</h4>
+                    <div id="detailGroupActivity">
+                        <p class="activity-item">• Welcome to the group!</p>
+                        <p class="activity-item">• Share your study schedule</p>
+                        <p class="activity-item">• Let's start discussions!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-detail-footer">
+                <button class="btn-modal-action btn-join" id="detailJoinBtn" onclick="toggleGroupMembership()">
+                    Join Group
+                </button>
+                <button class="btn-modal-action btn-message" onclick="alert('Group chat - Coming soon!')">
+                    💬 View Discussions
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <span class="notif-icon">📚</span>
+                <div class="notif-content">
+                    <h4>New group created!</h4>
+                    <p>Check out the latest study groups</p>
+                    <span class="notif-time">Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Menu Dropdown -->
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+            <div class="user-avatar-large">👤</div>
+            <div class="user-info">
+                <h4 id="dropdownUserName">User</h4>
+                <p id="dropdownUserEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-dropdown-menu">
+            <li><a href="profile.html">👤 My Profile</a></li>
+            <li><a href="#" onclick="alert('Settings - Coming soon!')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="alert('Help - Coming soon!')">❓ Help & Support</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeAllDropdowns()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
