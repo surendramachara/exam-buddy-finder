@@ -2236,3 +2236,976 @@ function uploadResource() {
 
 console.log('📖 Session 7: Resources page loaded!');
 console.log('📊 Sample resources:', sampleResources.length);
+// ==========================================
+// SESSION 8: DOUBT FORUM PAGE JAVASCRIPT
+// ==========================================
+
+// Sample doubts data
+const sampleDoubts = [
+    {
+        id: 1,
+        title: 'What is the difference between Article 370 and Article 35A?',
+        description: 'I am confused about these two articles. Can someone explain the key differences and their current status?',
+        exam: 'VDO',
+        subject: 'Indian Polity',
+        askedBy: 'Rahul Kumar',
+        askedDate: '2026-02-07T10:00:00',
+        upvotes: 15,
+        answers: 3,
+        solved: true,
+        myDoubt: false,
+        upvotedByMe: false
+    },
+    {
+        id: 2,
+        title: 'How to calculate compound interest quickly?',
+        description: 'Is there any shortcut or formula to calculate compound interest in SSC exams? The traditional method takes too much time.',
+        exam: 'SSC',
+        subject: 'Mathematics',
+        askedBy: 'Priya Singh',
+        askedDate: '2026-02-07T08:30:00',
+        upvotes: 23,
+        answers: 5,
+        solved: true,
+        myDoubt: false,
+        upvotedByMe: true
+    },
+    {
+        id: 3,
+        title: 'Important dates of Indian Freedom Struggle?',
+        description: 'Which are the most important dates I should remember for UPSC prelims regarding freedom struggle?',
+        exam: 'UPSC',
+        subject: 'History',
+        askedBy: 'Amit Verma',
+        askedDate: '2026-02-07T06:15:00',
+        upvotes: 8,
+        answers: 2,
+        solved: false,
+        myDoubt: true,
+        upvotedByMe: false
+    },
+    {
+        id: 4,
+        title: 'Difference between Weather and Climate?',
+        description: 'I always get confused between these two terms. Can someone explain with examples?',
+        exam: 'Other',
+        subject: 'Geography',
+        askedBy: 'Anjali Sharma',
+        askedDate: '2026-02-06T20:45:00',
+        upvotes: 12,
+        answers: 4,
+        solved: true,
+        myDoubt: false,
+        upvotedByMe: false
+    },
+    {
+        id: 5,
+        title: 'Banking terms - What is CRR and SLR?',
+        description: 'Need clear explanation of Cash Reserve Ratio and Statutory Liquidity Ratio for banking exams.',
+        exam: 'Banking',
+        subject: 'Economics',
+        askedBy: 'Vikash Yadav',
+        askedDate: '2026-02-06T18:20:00',
+        upvotes: 18,
+        answers: 3,
+        solved: true,
+        myDoubt: false,
+        upvotedByMe: false
+    },
+    {
+        id: 6,
+        title: 'Current Affairs - January 2026 highlights?',
+        description: 'What were the most important current affairs topics in January 2026 for competitive exams?',
+        exam: 'Other',
+        subject: 'Current Affairs',
+        askedBy: 'Neha Gupta',
+        askedDate: '2026-02-06T15:00:00',
+        upvotes: 31,
+        answers: 7,
+        solved: false,
+        myDoubt: false,
+        upvotedByMe: true
+    }
+];
+
+// Sample answers
+const sampleAnswers = {
+    1: [
+        {
+            id: 1,
+            doubtId: 1,
+            answeredBy: 'Expert User',
+            answerDate: '2026-02-07T11:00:00',
+            text: 'Article 370 gave special status to Jammu & Kashmir, while Article 35A gave J&K legislature power to define permanent residents. Both were abrogated in August 2019.',
+            upvotes: 12,
+            isBestAnswer: true
+        },
+        {
+            id: 2,
+            doubtId: 1,
+            answeredBy: 'Study Buddy',
+            answerDate: '2026-02-07T12:00:00',
+            text: 'In simple terms: 370 was about autonomy, 35A was about residency rights. Both no longer exist.',
+            upvotes: 5,
+            isBestAnswer: false
+        }
+    ],
+    2: [
+        {
+            id: 3,
+            doubtId: 2,
+            answeredBy: 'Math Expert',
+            answerDate: '2026-02-07T09:00:00',
+            text: 'Use the formula: A = P(1 + r/100)^t. For quick calculation, remember: at 10% per annum, money doubles in approximately 7.2 years (Rule of 72).',
+            upvotes: 18,
+            isBestAnswer: true
+        }
+    ]
+};
+
+// Global variables
+let allDoubts = [...sampleDoubts];
+let filteredDoubts = [...sampleDoubts];
+let currentDoubtTab = 'all';
+let selectedDoubt = null;
+
+// Initialize Doubts page
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('doubts.html')) {
+        checkAuth();
+        loadDoubtsPage();
+        setupDoubtFormListeners();
+    }
+});
+
+// Load doubts page
+function loadDoubtsPage() {
+    loadUserData();
+    loadDoubts();
+    updateDoubtCounts();
+    updateDoubtStats();
+}
+
+// Load doubts
+function loadDoubts() {
+    const container = document.getElementById('doubtsContainer');
+    const emptyState = document.getElementById('emptyDoubtState');
+    
+    // Get current tab doubts
+    let doubts = [];
+    
+    if (currentDoubtTab === 'all') {
+        doubts = filteredDoubts;
+    } else if (currentDoubtTab === 'my-doubts') {
+        doubts = filteredDoubts.filter(d => d.myDoubt);
+    } else if (currentDoubtTab === 'answered') {
+        // In real app, check if user has answered
+        doubts = filteredDoubts.filter(d => d.answers > 0);
+    } else if (currentDoubtTab === 'trending') {
+        doubts = filteredDoubts.filter(d => d.upvotes > 15);
+    }
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    if (doubts.length === 0) {
+        emptyState.style.display = 'block';
+        container.style.display = 'none';
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    container.style.display = 'flex';
+    
+    // Add doubts
+    doubts.forEach(doubt => {
+        const card = createDoubtCard(doubt);
+        container.appendChild(card);
+    });
+    
+    // Update result count
+    document.getElementById('doubtResultCount').textContent = doubts.length;
+}
+
+// Create doubt card
+function createDoubtCard(doubt) {
+    const card = document.createElement('div');
+    card.className = 'doubt-card' + (doubt.solved ? ' solved' : '');
+    card.onclick = () => openDoubtDetail(doubt);
+    
+    // Time ago
+    const askedDate = new Date(doubt.askedDate);
+    const hoursAgo = Math.floor((new Date() - askedDate) / (1000 * 60 * 60));
+    const timeText = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo/24)}d ago`;
+    
+    card.innerHTML = `
+        <div class="doubt-card-header">
+            <h3 class="doubt-title">${doubt.title}</h3>
+            <span class="doubt-status ${doubt.solved ? 'solved' : ''}">${doubt.solved ? '✅ Solved' : '⏳ Pending'}</span>
+        </div>
+        
+        <p class="doubt-description">${doubt.description}</p>
+        
+        <div class="doubt-meta-tags">
+            <span class="doubt-tag">📝 ${doubt.exam}</span>
+            <span class="doubt-tag">📖 ${doubt.subject}</span>
+        </div>
+        
+        <div class="doubt-footer">
+            <div class="doubt-author">
+                <span>👤 ${doubt.askedBy}</span>
+                <span>•</span>
+                <span>🕒 ${timeText}</span>
+            </div>
+            <div class="doubt-stats-inline">
+                <div class="doubt-stat">
+                    <span>⬆️</span>
+                    <span>${doubt.upvotes}</span>
+                </div>
+                <div class="doubt-stat">
+                    <span>💬</span>
+                    <span>${doubt.answers} answers</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+// Apply doubt filters
+function applyDoubtFilters() {
+    const examFilter = document.getElementById('filterDoubtExam').value;
+    const subjectFilter = document.getElementById('filterDoubtSubject').value;
+    const statusFilter = document.getElementById('filterDoubtStatus').value;
+    const searchFilter = document.getElementById('filterDoubtSearch').value.toLowerCase().trim();
+    
+    filteredDoubts = allDoubts.filter(doubt => {
+        if (examFilter && doubt.exam !== examFilter) return false;
+        if (subjectFilter && doubt.subject !== subjectFilter) return false;
+        if (statusFilter === 'Solved' && !doubt.solved) return false;
+        if (statusFilter === 'Pending' && doubt.solved) return false;
+        if (searchFilter && !doubt.title.toLowerCase().includes(searchFilter) && 
+            !doubt.description.toLowerCase().includes(searchFilter)) return false;
+        return true;
+    });
+    
+    loadDoubts();
+    updateDoubtCounts();
+}
+
+// Reset doubt filters
+function resetDoubtFilters() {
+    document.getElementById('filterDoubtExam').value = '';
+    document.getElementById('filterDoubtSubject').value = '';
+    document.getElementById('filterDoubtStatus').value = '';
+    document.getElementById('filterDoubtSearch').value = '';
+    
+    filteredDoubts = [...allDoubts];
+    loadDoubts();
+    updateDoubtCounts();
+}
+
+// Switch doubt tab
+function switchDoubtTab(tab) {
+    currentDoubtTab = tab;
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    loadDoubts();
+}
+
+// Update doubt counts
+function updateDoubtCounts() {
+    document.getElementById('allDoubtsCount').textContent = filteredDoubts.length;
+    document.getElementById('myDoubtsCount').textContent = filteredDoubts.filter(d => d.myDoubt).length;
+    document.getElementById('answeredCount').textContent = filteredDoubts.filter(d => d.answers > 0).length;
+}
+
+// Update doubt stats
+function updateDoubtStats() {
+    const totalDoubts = allDoubts.length;
+    const solvedDoubts = allDoubts.filter(d => d.solved).length;
+    const pendingDoubts = allDoubts.filter(d => !d.solved).length;
+    const myAnswers = 8; // Dummy value
+    
+    document.getElementById('totalDoubts').textContent = totalDoubts;
+    document.getElementById('solvedDoubts').textContent = solvedDoubts;
+    document.getElementById('pendingDoubts').textContent = pendingDoubts;
+    document.getElementById('myAnswers').textContent = myAnswers;
+}
+
+// Open doubt detail modal
+function openDoubtDetail(doubt) {
+    selectedDoubt = doubt;
+    
+    const modal = document.getElementById('doubtDetailModal');
+    
+    // Time ago
+    const askedDate = new Date(doubt.askedDate);
+    const hoursAgo = Math.floor((new Date() - askedDate) / (1000 * 60 * 60));
+    const timeText = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo} hours ago` : `${Math.floor(hoursAgo/24)} days ago`;
+    
+    document.getElementById('detailDoubtStatus').textContent = doubt.solved ? '✅ Solved' : '⏳ Pending';
+    document.getElementById('detailDoubtStatus').className = 'doubt-status-badge' + (doubt.solved ? ' solved' : '');
+    document.getElementById('detailDoubtTitle').textContent = doubt.title;
+    document.getElementById('detailDoubtExam').textContent = doubt.exam;
+    document.getElementById('detailDoubtSubject').textContent = doubt.subject;
+    document.getElementById('detailDoubtAsker').textContent = doubt.askedBy;
+    document.getElementById('detailDoubtTime').textContent = timeText;
+    document.getElementById('detailDoubtDesc').textContent = doubt.description;
+    document.getElementById('detailDoubtUpvotes').textContent = doubt.upvotes;
+    document.getElementById('detailDoubtAnswerCount').textContent = doubt.answers;
+    
+    // Load answers
+    loadAnswers(doubt.id);
+    
+    modal.classList.add('show');
+}
+
+// Load answers
+function loadAnswers(doubtId) {
+    const answersList = document.getElementById('answersList');
+    const answersCount = document.getElementById('answersCount');
+    
+    const answers = sampleAnswers[doubtId] || [];
+    answersCount.textContent = answers.length;
+    
+    if (answers.length === 0) {
+        answersList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No answers yet. Be the first to answer!</p>';
+        return;
+    }
+    
+    answersList.innerHTML = '';
+    
+    answers.forEach(answer => {
+        const answerDate = new Date(answer.answerDate);
+        const hoursAgo = Math.floor((new Date() - answerDate) / (1000 * 60 * 60));
+        const timeText = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo/24)}d ago`;
+        
+        const answerEl = document.createElement('div');
+        answerEl.className = 'answer-item' + (answer.isBestAnswer ? ' best-answer' : '');
+        answerEl.innerHTML = `
+            ${answer.isBestAnswer ? '<div class="best-answer-badge">✅ Best Answer</div>' : ''}
+            <div class="answer-author">
+                <div class="answer-author-info">
+                    <span>👤</span>
+                    <span>${answer.answeredBy}</span>
+                </div>
+                <span class="answer-time">🕒 ${timeText}</span>
+            </div>
+            <p class="answer-text">${answer.text}</p>
+            <div class="answer-actions">
+                <button class="btn-answer-action">⬆️ ${answer.upvotes}</button>
+                ${!answer.isBestAnswer && selectedDoubt.myDoubt ? '<button class="btn-answer-action">✅ Mark as Best</button>' : ''}
+            </div>
+        `;
+        answersList.appendChild(answerEl);
+    });
+}
+
+// Close doubt detail modal
+function closeDoubtDetailModal() {
+    document.getElementById('doubtDetailModal').classList.remove('show');
+    selectedDoubt = null;
+}
+
+// Upvote doubt
+function upvoteDoubt() {
+    if (selectedDoubt) {
+        if (!selectedDoubt.upvotedByMe) {
+            selectedDoubt.upvotes++;
+            selectedDoubt.upvotedByMe = true;
+            document.getElementById('detailDoubtUpvotes').textContent = selectedDoubt.upvotes;
+            showNotification('⬆️ Upvoted!', 'success');
+        } else {
+            selectedDoubt.upvotes--;
+            selectedDoubt.upvotedByMe = false;
+            document.getElementById('detailDoubtUpvotes').textContent = selectedDoubt.upvotes;
+            showNotification('Upvote removed', 'info');
+        }
+        loadDoubts();
+    }
+}
+
+// Post answer
+function postAnswer() {
+    const answerText = document.getElementById('answerText').value.trim();
+    
+    if (!answerText) {
+        showNotification('❌ Please write an answer!', 'error');
+        return;
+    }
+    
+    if (answerText.length > 500) {
+        showNotification('❌ Answer must be under 500 characters!', 'error');
+        return;
+    }
+    
+    if (!selectedDoubt) return;
+    
+    // Create new answer
+    if (!sampleAnswers[selectedDoubt.id]) {
+        sampleAnswers[selectedDoubt.id] = [];
+    }
+    
+    const userStr = localStorage.getItem('examBuddyUser') || sessionStorage.getItem('examBuddyUser');
+    const user = userStr ? JSON.parse(userStr) : { name: 'User' };
+    
+    const newAnswer = {
+        id: Date.now(),
+        doubtId: selectedDoubt.id,
+        answeredBy: user.name,
+        answerDate: new Date().toISOString(),
+        text: answerText,
+        upvotes: 0,
+        isBestAnswer: false
+    };
+    
+    sampleAnswers[selectedDoubt.id].push(newAnswer);
+    selectedDoubt.answers++;
+    
+    // Reload answers
+    loadAnswers(selectedDoubt.id);
+    
+    // Clear form
+    document.getElementById('answerText').value = '';
+    document.getElementById('answerTextCount').textContent = '0/500 characters';
+    
+    showNotification('✅ Answer posted successfully!', 'success');
+    loadDoubts();
+}
+
+// Open ask doubt modal
+function openAskDoubtModal() {
+    document.getElementById('askDoubtModal').classList.add('show');
+}
+
+// Close ask doubt modal
+function closeAskDoubtModal() {
+    document.getElementById('askDoubtModal').classList.remove('show');
+    document.getElementById('askDoubtForm').reset();
+}
+
+// Setup doubt form listeners
+function setupDoubtFormListeners() {
+    const doubtDesc = document.getElementById('doubtDescription');
+    const doubtDescCount = document.getElementById('doubtDescCount');
+    
+    if (doubtDesc && doubtDescCount) {
+        doubtDesc.addEventListener('input', function() {
+            const length = this.value.length;
+            doubtDescCount.textContent = length + '/500 characters';
+            doubtDescCount.style.color = length > 500 ? '#ff4757' : '#999';
+        });
+    }
+    
+    const answerText = document.getElementById('answerText');
+    const answerTextCount = document.getElementById('answerTextCount');
+    
+    if (answerText && answerTextCount) {
+        answerText.addEventListener('input', function() {
+            const length = this.value.length;
+            answerTextCount.textContent = length + '/500 characters';
+            answerTextCount.style.color = length > 500 ? '#ff4757' : '#999';
+        });
+    }
+}
+
+// Post doubt
+function postDoubt() {
+    const title = document.getElementById('doubtTitle').value.trim();
+    const description = document.getElementById('doubtDescription').value.trim();
+    const exam = document.getElementById('doubtExam').value;
+    const subject = document.getElementById('doubtSubject').value;
+    
+    if (!title || !description || !exam || !subject) {
+        showNotification('❌ Please fill all required fields!', 'error');
+        return;
+    }
+    
+    if (description.length > 500) {
+        showNotification('❌ Description must be under 500 characters!', 'error');
+        return;
+    }
+    
+    const userStr = localStorage.getItem('examBuddyUser') || sessionStorage.getItem('examBuddyUser');
+    const user = userStr ? JSON.parse(userStr) : { name: 'User' };
+    
+    const newDoubt = {
+        id: allDoubts.length + 1,
+        title: title,
+        description: description,
+        exam: exam,
+        subject: subject,
+        askedBy: user.name,
+        askedDate: new Date().toISOString(),
+        upvotes: 0,
+        answers: 0,
+        solved: false,
+        myDoubt: true,
+        upvotedByMe: false
+    };
+    
+    allDoubts.unshift(newDoubt);
+    filteredDoubts = [...allDoubts];
+    
+    showNotification('🎉 Doubt posted successfully!', 'success');
+    closeAskDoubtModal();
+    loadDoubts();
+    updateDoubtCounts();
+    updateDoubtStats();
+}
+
+console.log('❓ Session 8: Doubt Forum page loaded!');
+console.log('📊 Sample doubts:', sampleDoubts.length);
+// ==========================================
+// SESSION 9: MY PROGRESS PAGE JAVASCRIPT
+// ==========================================
+
+// Sample progress data
+const progressData = {
+    currentStreak: 12,
+    longestStreak: 18,
+    totalHours: 145,
+    weekHours: 23,
+    topicsCovered: 48,
+    monthTopics: 12,
+    currentRank: 23,
+    rankChange: 5
+};
+
+// Sample check-in data (which days user checked in)
+const checkedInDays = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14, 15, 17, 18, 19, 21, 22, 25, 26, 28];
+
+// Sample study hours data (last 7 days)
+const studyHoursData = [
+    { day: 'Mon', hours: 3.5 },
+    { day: 'Tue', hours: 4.0 },
+    { day: 'Wed', hours: 2.5 },
+    { day: 'Thu', hours: 5.0 },
+    { day: 'Fri', hours: 3.0 },
+    { day: 'Sat', hours: 4.5 },
+    { day: 'Sun', hours: 0.5 }
+];
+
+// Sample topics data
+let topicsData = [
+    { id: 1, subject: 'Indian Polity', name: 'Fundamental Rights', completion: 100 },
+    { id: 2, subject: 'History', name: 'Freedom Struggle', completion: 75 },
+    { id: 3, subject: 'Geography', name: 'Indian Geography', completion: 60 },
+    { id: 4, subject: 'Economics', name: 'Banking Basics', completion: 40 },
+    { id: 5, subject: 'Mathematics', name: 'Algebra', completion: 85 },
+    { id: 6, subject: 'Reasoning', name: 'Logical Reasoning', completion: 50 }
+];
+
+// Sample goals data
+let goalsData = [
+    { id: 1, title: 'Study 100 hours this month', current: 75, target: 100, deadline: '2026-02-28', completed: false },
+    { id: 2, title: 'Complete Indian Polity syllabus', current: 12, target: 15, deadline: '2026-02-15', completed: false },
+    { id: 3, title: 'Solve 500 practice questions', current: 500, target: 500, deadline: '2026-02-01', completed: true }
+];
+
+// Current calendar month/year
+let currentCalendarMonth = 1; // February (0-indexed, so 1 = February)
+let currentCalendarYear = 2026;
+
+// Initialize Progress page
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('progress.html')) {
+        checkAuth();
+        loadProgressPage();
+        setupProgressFormListeners();
+    }
+});
+
+// Load progress page
+function loadProgressPage() {
+    loadUserData();
+    loadProgressStats();
+    generateCalendar();
+    renderStudyHoursChart();
+    loadTopics();
+    loadGoals();
+    
+    // Set today's date in log hours modal
+    const today = new Date().toISOString().split('T')[0];
+    const studyDateInput = document.getElementById('studyDate');
+    if (studyDateInput) {
+        studyDateInput.value = today;
+        studyDateInput.max = today; // Can't log future dates
+    }
+}
+
+// Load progress stats
+function loadProgressStats() {
+    document.getElementById('currentStreak').textContent = progressData.currentStreak;
+    document.getElementById('longestStreak').textContent = progressData.longestStreak;
+    document.getElementById('totalHours').textContent = progressData.totalHours;
+    document.getElementById('weekHours').textContent = progressData.weekHours;
+    document.getElementById('topicsCovered').textContent = progressData.topicsCovered;
+    document.getElementById('monthTopics').textContent = progressData.monthTopics;
+    document.getElementById('currentRank').textContent = '#' + progressData.currentRank;
+}
+
+// Generate calendar
+function generateCalendar() {
+    const calendarGrid = document.getElementById('calendarGrid');
+    const currentMonthSpan = document.getElementById('currentMonth');
+    
+    if (!calendarGrid || !currentMonthSpan) return;
+    
+    // Month names
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    currentMonthSpan.textContent = monthNames[currentCalendarMonth] + ' ' + currentCalendarYear;
+    
+    // Clear calendar
+    calendarGrid.innerHTML = '';
+    
+    // Day headers
+    const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayHeaders.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day day-header';
+        dayHeader.textContent = day;
+        calendarGrid.appendChild(dayHeader);
+    });
+    
+    // Get first day of month and total days
+    const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+    const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+    
+    // Today's date
+    const today = new Date();
+    const isCurrentMonth = today.getMonth() === currentCalendarMonth && today.getFullYear() === currentCalendarYear;
+    const todayDate = today.getDate();
+    
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'calendar-day';
+        calendarGrid.appendChild(emptyCell);
+    }
+    
+    // Days of month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day';
+        dayCell.textContent = day;
+        
+        // Check if this is today
+        if (isCurrentMonth && day === todayDate) {
+            dayCell.classList.add('today');
+        }
+        // Check if checked in
+        else if (checkedInDays.includes(day) && (currentCalendarMonth === 1 && currentCalendarYear === 2026)) {
+            dayCell.classList.add('checked');
+        }
+        // Check if missed (past days not checked in)
+        else if (isCurrentMonth && day < todayDate) {
+            if (!checkedInDays.includes(day)) {
+                dayCell.classList.add('missed');
+            }
+        }
+        // Future days
+        else if (isCurrentMonth && day > todayDate) {
+            dayCell.classList.add('future');
+        }
+        
+        calendarGrid.appendChild(dayCell);
+    }
+}
+
+// Previous month
+function previousMonth() {
+    currentCalendarMonth--;
+    if (currentCalendarMonth < 0) {
+        currentCalendarMonth = 11;
+        currentCalendarYear--;
+    }
+    generateCalendar();
+}
+
+// Next month
+function nextMonth() {
+    currentCalendarMonth++;
+    if (currentCalendarMonth > 11) {
+        currentCalendarMonth = 0;
+        currentCalendarYear++;
+    }
+    generateCalendar();
+}
+
+// Render study hours chart
+function renderStudyHoursChart() {
+    const chartContainer = document.getElementById('studyHoursChart');
+    if (!chartContainer) return;
+    
+    chartContainer.innerHTML = '';
+    
+    const maxHours = Math.max(...studyHoursData.map(d => d.hours));
+    
+    studyHoursData.forEach(data => {
+        const barWrapper = document.createElement('div');
+        barWrapper.style.flex = '1';
+        barWrapper.style.display = 'flex';
+        barWrapper.style.flexDirection = 'column';
+        barWrapper.style.alignItems = 'center';
+        
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        const heightPercent = (data.hours / maxHours) * 100;
+        bar.style.height = heightPercent + '%';
+        
+        const value = document.createElement('div');
+        value.className = 'chart-bar-value';
+        value.textContent = data.hours + 'h';
+        bar.appendChild(value);
+        
+        const label = document.createElement('div');
+        label.className = 'chart-bar-label';
+        label.textContent = data.day;
+        
+        barWrapper.appendChild(bar);
+        barWrapper.appendChild(label);
+        chartContainer.appendChild(barWrapper);
+    });
+}
+
+// Update chart (when period changes)
+function updateChart() {
+    const period = document.getElementById('chartPeriod').value;
+    // In real app, fetch data for selected period
+    // For now, just show same data
+    renderStudyHoursChart();
+}
+
+// Load topics
+function loadTopics() {
+    const topicsGrid = document.getElementById('topicsGrid');
+    if (!topicsGrid) return;
+    
+    topicsGrid.innerHTML = '';
+    
+    if (topicsData.length === 0) {
+        topicsGrid.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem; grid-column: 1/-1;">No topics added yet. Add your first topic!</p>';
+        return;
+    }
+    
+    topicsData.forEach(topic => {
+        const topicCard = document.createElement('div');
+        topicCard.className = 'topic-card';
+        topicCard.innerHTML = `
+            <div class="topic-header">
+                <div class="topic-info">
+                    <h4>${topic.name}</h4>
+                    <p>${topic.subject}</p>
+                </div>
+                <div class="topic-completion">${topic.completion}%</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${topic.completion}%"></div>
+            </div>
+        `;
+        topicsGrid.appendChild(topicCard);
+    });
+}
+
+// Load goals
+function loadGoals() {
+    const goalsList = document.getElementById('goalsList');
+    if (!goalsList) return;
+    
+    goalsList.innerHTML = '';
+    
+    if (goalsData.length === 0) {
+        goalsList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No goals set yet. Set your first goal!</p>';
+        return;
+    }
+    
+    goalsData.forEach(goal => {
+        const progressPercent = Math.min((goal.current / goal.target) * 100, 100);
+        const isCompleted = goal.completed || goal.current >= goal.target;
+        
+        const goalCard = document.createElement('div');
+        goalCard.className = 'goal-card';
+        goalCard.innerHTML = `
+            <div class="goal-header">
+                <div class="goal-info">
+                    <h4>${goal.title}</h4>
+                    ${goal.deadline ? `<p>Deadline: ${new Date(goal.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>` : ''}
+                </div>
+                <div class="goal-status ${isCompleted ? 'completed' : ''}">${isCompleted ? '✅ Completed' : '⏳ In Progress'}</div>
+            </div>
+            <div class="goal-progress">
+                <div class="goal-progress-text">
+                    <span>${goal.current} / ${goal.target}</span>
+                    <span>${Math.round(progressPercent)}%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+                </div>
+            </div>
+        `;
+        goalsList.appendChild(goalCard);
+    });
+}
+
+// Open log hours modal
+function openLogHoursModal() {
+    document.getElementById('logHoursModal').classList.add('show');
+}
+
+// Close log hours modal
+function closeLogHoursModal() {
+    document.getElementById('logHoursModal').classList.remove('show');
+    document.getElementById('logHoursForm').reset();
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('studyDate').value = today;
+}
+
+// Log study hours
+function logStudyHours() {
+    const date = document.getElementById('studyDate').value;
+    const hours = parseFloat(document.getElementById('hoursStudied').value);
+    const subject = document.getElementById('studySubject').value;
+    const notes = document.getElementById('studyNotes').value.trim();
+    
+    if (!date || !hours) {
+        showNotification('❌ Please fill required fields!', 'error');
+        return;
+    }
+    
+    if (hours < 0.5 || hours > 24) {
+        showNotification('❌ Hours must be between 0.5 and 24!', 'error');
+        return;
+    }
+    
+    // Update stats (dummy)
+    progressData.totalHours += hours;
+    progressData.weekHours += hours;
+    
+    // Update display
+    document.getElementById('totalHours').textContent = Math.round(progressData.totalHours);
+    document.getElementById('weekHours').textContent = Math.round(progressData.weekHours);
+    
+    showNotification('✅ Study hours logged successfully!', 'success');
+    closeLogHoursModal();
+    
+    // Update chart (in real app, would add to data and re-render)
+    renderStudyHoursChart();
+}
+
+// Open add topic modal
+function openAddTopicModal() {
+    document.getElementById('addTopicModal').classList.add('show');
+}
+
+// Close add topic modal
+function closeAddTopicModal() {
+    document.getElementById('addTopicModal').classList.remove('show');
+    document.getElementById('addTopicForm').reset();
+    document.getElementById('completionValue').textContent = '0';
+}
+
+// Update completion label
+function updateCompletionLabel() {
+    const value = document.getElementById('topicCompletion').value;
+    document.getElementById('completionValue').textContent = value;
+}
+
+// Add topic
+function addTopic() {
+    const subject = document.getElementById('topicSubject').value;
+    const name = document.getElementById('topicName').value.trim();
+    const completion = parseInt(document.getElementById('topicCompletion').value);
+    
+    if (!subject || !name) {
+        showNotification('❌ Please fill all required fields!', 'error');
+        return;
+    }
+    
+    const newTopic = {
+        id: topicsData.length + 1,
+        subject: subject,
+        name: name,
+        completion: completion
+    };
+    
+    topicsData.push(newTopic);
+    
+    // Update stats
+    progressData.topicsCovered++;
+    progressData.monthTopics++;
+    document.getElementById('topicsCovered').textContent = progressData.topicsCovered;
+    document.getElementById('monthTopics').textContent = progressData.monthTopics;
+    
+    showNotification('✅ Topic added successfully!', 'success');
+    closeAddTopicModal();
+    loadTopics();
+}
+
+// Open set goal modal
+function openSetGoalModal() {
+    document.getElementById('setGoalModal').classList.add('show');
+}
+
+// Close set goal modal
+function closeSetGoalModal() {
+    document.getElementById('setGoalModal').classList.remove('show');
+    document.getElementById('setGoalForm').reset();
+}
+
+// Set goal
+function setGoal() {
+    const title = document.getElementById('goalTitle').value.trim();
+    const target = parseInt(document.getElementById('goalTarget').value);
+    const deadline = document.getElementById('goalDeadline').value;
+    
+    if (!title || !target) {
+        showNotification('❌ Please fill required fields!', 'error');
+        return;
+    }
+    
+    if (target < 1) {
+        showNotification('❌ Target must be at least 1!', 'error');
+        return;
+    }
+    
+    const newGoal = {
+        id: goalsData.length + 1,
+        title: title,
+        current: 0,
+        target: target,
+        deadline: deadline || null,
+        completed: false
+    };
+    
+    goalsData.push(newGoal);
+    
+    showNotification('🎉 Goal set successfully!', 'success');
+    closeSetGoalModal();
+    loadGoals();
+}
+
+// Setup progress form listeners
+function setupProgressFormListeners() {
+    const studyNotes = document.getElementById('studyNotes');
+    const studyNotesCount = document.getElementById('studyNotesCount');
+    
+    if (studyNotes && studyNotesCount) {
+        studyNotes.addEventListener('input', function() {
+            const length = this.value.length;
+            studyNotesCount.textContent = length + '/200 characters';
+            studyNotesCount.style.color = length > 200 ? '#ff4757' : '#999';
+        });
+    }
+}
+
+console.log('📊 Session 9: My Progress page loaded!');
+console.log('📈 Progress data loaded:', progressData);

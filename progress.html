@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Progress - Exam Buddy Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 class="logo">📚 Exam Buddy</h2>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-icon" onclick="toggleNotifications()">
+                🔔
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <div class="user-avatar">👤</div>
+                <span class="user-name" id="userName">User</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <span class="icon">👤</span>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="find-buddies.html">
+                    <span class="icon">👥</span>
+                    <span class="text">Find Buddies</span>
+                </a>
+            </li>
+            <li>
+                <a href="groups.html">
+                    <span class="icon">📚</span>
+                    <span class="text">Study Groups</span>
+                </a>
+            </li>
+            <li>
+                <a href="resources.html">
+                    <span class="icon">📖</span>
+                    <span class="text">Resources</span>
+                </a>
+            </li>
+            <li>
+                <a href="doubts.html">
+                    <span class="icon">❓</span>
+                    <span class="text">Doubt Forum</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="progress.html">
+                    <span class="icon">📊</span>
+                    <span class="text">My Progress</span>
+                </a>
+            </li>
+            <li>
+                <a href="leaderboard.html">
+                    <span class="icon">🏆</span>
+                    <span class="text">Leaderboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="tests.html">
+                    <span class="icon">🎯</span>
+                    <span class="text">Mock Tests</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="#" onclick="logout()">
+                    <span class="icon">🚪</span>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>📊 My Progress</h1>
+                <p class="page-subtitle">Track your study journey and achievements</p>
+            </div>
+            <button class="btn-primary" onclick="openLogHoursModal()">
+                ➕ Log Study Hours
+            </button>
+        </div>
+
+        <!-- Progress Stats -->
+        <div class="progress-stats-grid">
+            <div class="progress-stat-card streak-card">
+                <div class="stat-header">
+                    <h3>🔥 Current Streak</h3>
+                </div>
+                <div class="stat-value-large">
+                    <h2 id="currentStreak">12</h2>
+                    <p>days</p>
+                </div>
+                <div class="stat-footer">
+                    <span>Longest: <strong id="longestStreak">18</strong> days</span>
+                </div>
+            </div>
+
+            <div class="progress-stat-card hours-card">
+                <div class="stat-header">
+                    <h3>⏰ Total Hours</h3>
+                </div>
+                <div class="stat-value-large">
+                    <h2 id="totalHours">145</h2>
+                    <p>hours</p>
+                </div>
+                <div class="stat-footer">
+                    <span>This week: <strong id="weekHours">23</strong> hours</span>
+                </div>
+            </div>
+
+            <div class="progress-stat-card topics-card">
+                <div class="stat-header">
+                    <h3>📚 Topics Covered</h3>
+                </div>
+                <div class="stat-value-large">
+                    <h2 id="topicsCovered">48</h2>
+                    <p>topics</p>
+                </div>
+                <div class="stat-footer">
+                    <span>This month: <strong id="monthTopics">12</strong> topics</span>
+                </div>
+            </div>
+
+            <div class="progress-stat-card rank-card">
+                <div class="stat-header">
+                    <h3>🏆 Current Rank</h3>
+                </div>
+                <div class="stat-value-large">
+                    <h2 id="currentRank">#23</h2>
+                    <p>overall</p>
+                </div>
+                <div class="stat-footer">
+                    <span>Up <strong>+5</strong> this week</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Check-in Section -->
+        <div class="progress-section">
+            <div class="section-header">
+                <h3>📅 Daily Check-in Calendar</h3>
+                <div class="month-selector">
+                    <button onclick="previousMonth()">◀</button>
+                    <span id="currentMonth">February 2026</span>
+                    <button onclick="nextMonth()">▶</button>
+                </div>
+            </div>
+            <div class="calendar-container">
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated by JavaScript -->
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <span class="legend-color checked"></span>
+                        <span>Checked-in</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color today"></span>
+                        <span>Today</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color missed"></span>
+                        <span>Missed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Hours Chart -->
+        <div class="progress-section">
+            <div class="section-header">
+                <h3>📈 Study Hours - Last 7 Days</h3>
+                <select id="chartPeriod" onchange="updateChart()">
+                    <option value="7">Last 7 Days</option>
+                    <option value="30">Last 30 Days</option>
+                    <option value="90">Last 3 Months</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <div class="simple-bar-chart" id="studyHoursChart">
+                    <!-- Chart will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Topics Progress -->
+        <div class="progress-section">
+            <div class="section-header">
+                <h3>📚 Subject-wise Progress</h3>
+                <button class="btn-secondary" onclick="openAddTopicModal()">+ Add Topic</button>
+            </div>
+            <div class="topics-grid" id="topicsGrid">
+                <!-- Topics will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Study Goals -->
+        <div class="progress-section">
+            <div class="section-header">
+                <h3>🎯 My Goals</h3>
+                <button class="btn-secondary" onclick="openSetGoalModal()">+ Set Goal</button>
+            </div>
+            <div class="goals-list" id="goalsList">
+                <!-- Goals will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="progress-section">
+            <div class="section-header">
+                <h3>🏅 Achievements</h3>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-badge earned">
+                    <div class="badge-icon">🔥</div>
+                    <h4>Week Warrior</h4>
+                    <p>7-day streak</p>
+                </div>
+                <div class="achievement-badge earned">
+                    <div class="badge-icon">⏰</div>
+                    <h4>100 Hours</h4>
+                    <p>Study milestone</p>
+                </div>
+                <div class="achievement-badge locked">
+                    <div class="badge-icon">🌟</div>
+                    <h4>30-Day Streak</h4>
+                    <p>Keep going!</p>
+                </div>
+                <div class="achievement-badge locked">
+                    <div class="badge-icon">🏆</div>
+                    <h4>Top 10</h4>
+                    <p>Rank in top 10</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Log Hours Modal -->
+    <div class="modal-overlay" id="logHoursModal">
+        <div class="modal-content log-hours-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeLogHoursModal()">✕</button>
+            
+            <div class="modal-header-simple">
+                <h2>⏰ Log Study Hours</h2>
+                <p>Record your study session</p>
+            </div>
+
+            <form id="logHoursForm" class="log-hours-form" onsubmit="event.preventDefault(); logStudyHours();">
+                <div class="form-group">
+                    <label>📅 Date *</label>
+                    <input type="date" id="studyDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>⏰ Hours Studied *</label>
+                    <input type="number" id="hoursStudied" min="0.5" max="24" step="0.5" placeholder="e.g., 3.5" required>
+                    <small>Use decimals for minutes (e.g., 2.5 = 2 hours 30 mins)</small>
+                </div>
+
+                <div class="form-group">
+                    <label>📖 Subject</label>
+                    <select id="studySubject">
+                        <option value="">Select subject</option>
+                        <option value="Indian Polity">Indian Polity</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Economics">Economics</option>
+                        <option value="General Science">General Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Reasoning">Reasoning</option>
+                        <option value="English">English</option>
+                        <option value="Current Affairs">Current Affairs</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Notes (Optional)</label>
+                    <textarea id="studyNotes" placeholder="What did you study today?" rows="3" maxlength="200"></textarea>
+                    <small id="studyNotesCount">0/200 characters</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeLogHoursModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Log Hours</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Topic Modal -->
+    <div class="modal-overlay" id="addTopicModal">
+        <div class="modal-content add-topic-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAddTopicModal()">✕</button>
+            
+            <div class="modal-header-simple">
+                <h2>📚 Add Topic</h2>
+                <p>Track your topic completion</p>
+            </div>
+
+            <form id="addTopicForm" class="add-topic-form" onsubmit="event.preventDefault(); addTopic();">
+                <div class="form-group">
+                    <label>📖 Subject *</label>
+                    <select id="topicSubject" required>
+                        <option value="">Select subject</option>
+                        <option value="Indian Polity">Indian Polity</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Economics">Economics</option>
+                        <option value="General Science">General Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Reasoning">Reasoning</option>
+                        <option value="English">English</option>
+                        <option value="Current Affairs">Current Affairs</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Topic Name *</label>
+                    <input type="text" id="topicName" placeholder="e.g., Fundamental Rights" required maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label>📊 Completion *</label>
+                    <input type="range" id="topicCompletion" min="0" max="100" value="0" oninput="updateCompletionLabel()">
+                    <div class="completion-label">
+                        <span id="completionValue">0</span>%
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAddTopicModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Add Topic</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Set Goal Modal -->
+    <div class="modal-overlay" id="setGoalModal">
+        <div class="modal-content set-goal-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeSetGoalModal()">✕</button>
+            
+            <div class="modal-header-simple">
+                <h2>🎯 Set Goal</h2>
+                <p>Define your study target</p>
+            </div>
+
+            <form id="setGoalForm" class="set-goal-form" onsubmit="event.preventDefault(); setGoal();">
+                <div class="form-group">
+                    <label>📝 Goal Title *</label>
+                    <input type="text" id="goalTitle" placeholder="e.g., Complete Indian Polity" required maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label>🎯 Target *</label>
+                    <input type="number" id="goalTarget" min="1" placeholder="e.g., 50" required>
+                    <small>What's your target number? (hours/topics/tests)</small>
+                </div>
+
+                <div class="form-group">
+                    <label>📅 Deadline</label>
+                    <input type="date" id="goalDeadline">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeSetGoalModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Set Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification/User Dropdowns -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <span class="notif-icon">🔥</span>
+                <div class="notif-content">
+                    <h4>Streak milestone!</h4>
+                    <p>You've maintained a 12-day streak</p>
+                    <span class="notif-time">Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-dropdown-header">
+            <div class="user-avatar-large">👤</div>
+            <div class="user-info">
+                <h4 id="dropdownUserName">User</h4>
+                <p id="dropdownUserEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-dropdown-menu">
+            <li><a href="profile.html">👤 My Profile</a></li>
+            <li><a href="#" onclick="alert('Settings - Coming soon!')">⚙️ Settings</a></li>
+            <li><a href="#" onclick="alert('Help - Coming soon!')">❓ Help & Support</a></li>
+            <li class="divider"></li>
+            <li><a href="#" onclick="logout()">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAllDropdowns()"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
